@@ -1,4 +1,3 @@
-import PostThread from "@/components/forms/PostThread";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs"
@@ -6,6 +5,7 @@ import { Tabs,TabsContent,TabsTrigger, TabsList } from "@/components/ui/tabs";
 import { redirect } from "next/navigation"
 import { profileTabs } from "@/constants";
 import Image from "next/image";
+import ThreadsTab from "@/components/shared/ThreadsTab";
 export default async function Page({params}:{params:{id:string}}) {
     const user = await currentUser();
     if (!user) return null;
@@ -36,9 +36,26 @@ export default async function Page({params}:{params:{id:string}}) {
                                 className="object-contain"
                                 />
                                 <p className="max-sm:hidden">{tab.label}</p>
+                                {tab.label === 'Threads' && (
+                                    <p className="ml-1 rounded-sn bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
+                                        {userInfo?.threads?.length}
+                                    </p>
+                                )}
                             </TabsTrigger>
                         ))}
                     </TabsList>
+                    {profileTabs.map(tab=>(
+                        <TabsContent key={`content-${tab.label}`}
+                        value={tab.value}
+                        className="w-full text-light-1"
+                        >
+                            <ThreadsTab
+                            currentUserId={user.id}
+                            accountId={userInfo.id}
+                            accountType="User"
+                            />
+                        </TabsContent>
+                    ))}
                 </Tabs>
             </div>
         </section>
