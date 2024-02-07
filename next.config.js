@@ -4,6 +4,7 @@ const nextConfig = {
       ignoreBuildErrors:true,
     },
     experimental: {
+      runtime:'experimental-edge',
       serverActions: true,
       serverComponentsExternalPackages: ["mongoose"],
     },
